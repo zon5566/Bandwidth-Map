@@ -1,0 +1,49 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>markers</title>
+    <style>
+      #map {
+        width: 600px;
+        height: 400px;
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <div id="feature">
+      <form id="select_form" method="POST" action="">
+        {% csrf_token %}
+        <select name="carrier_select" id="carrier_select">
+          <option disabled selected value="%">-------------------</option>
+          {% for item in carrier %}
+          <option value="{{ item.id }}">{{ item.name }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="hour_select" id="hour_select">
+          <option disabled selected value="%">--</option>
+          {% for item in hour %}
+          <option value="{{ item }}">{{ item }}</option>
+          {% endfor %}
+        </select>
+      </form>
+      Carrier ID: <label id="test"></label>
+      <script type="text/javascript" src="{% static 'update.js' %}"></script>
+    </div>
+
+    <div>
+      Zoom level:<label id="zoom" value=""></label>  
+    </div>
+    
+    <div id="map">
+      <script type="text/javascript" src="{% static 'initMap.js' %}"></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4DoGm9uJ-MhbwRTWEzZVTRLrqQ-MYvmk&signed_in=true&libraries=visualization&callback=initMap">
+      </script>
+    </div>
+  </body>
+</html>

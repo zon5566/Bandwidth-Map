@@ -1,0 +1,24 @@
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Leave a Suggestion Here</h1>
+    <div class="message"></div>
+    <div>
+      <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit Feedback" />
+      </form>
+    </div>
+    <script type="text/javascript">
+      $('#form').submit(function(e){
+        $.post('/url/', $(this).serialize(), function(data){ ... 
+          $('.message').html(data.message);
+        // of course you can do something more fancy with your respone
+        }) ;
+        e.preventDefault();
+	  });
+    </script>
+</body>
+</html>
