@@ -15,17 +15,22 @@ YBLOCK_SIZE = 0.001802/2
 db = pymysql.connect(host='127.0.0.1', user='b02505006', passwd='f129365102', db='map')
 cursor = db.cursor();
 
-def choose_block(xcenter, ycenter, xblock, yblock, hour, carrier):
+def choose_block(xcenter, ycenter, xblock, yblock, hour, minute, carrier):
 	xstart = xcenter - xblock/2;
 	xend = xcenter + xblock/2;
 	ystart = ycenter - yblock/2;
 	yend = ycenter + yblock/2;
 
-	inst = '''select id, year, month, date, hour, minute, download
+	minute_start = minute*10;
+	minute_end = minute*10+9;
+
+	inst = '''select year, month, date, hour, minute, download
 		from speedtest where
 		longitude > %f and longitude < %f
 		and latitude > %f and latitude < %f
-		and hour = %d''' %(xstart, xend, ystart, yend, hour)
+		and hour = %d and minute > %d and minute < %d'''\
+		%(xstart, xend, ystart, yend, hour, minute_start, minute_end)
+
 	if(not carrier==''):
 		inst = inst + ' and carrier = %s'%(carrier)
 	#execute mySQL

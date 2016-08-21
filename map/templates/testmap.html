@@ -6,43 +6,70 @@
     <meta charset="utf-8">
     <title>markers</title>
     <style>
+      body {
+        margin: 10px;
+      }
+
       #map {
         width: 600px;
         height: 400px;
+      }
+      
+      label {
+        font-size: 20px;
+      }
+
+      #time_div, #carrier_div{
+        display: block;
+        margin: 5px;
       }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   </head>
 
   <body>
-    <div id="feature">
-      <form id="select_form" method="POST" action="">
-        {% csrf_token %}
+    <form id="select_form" method="POST" action="">
+      {% csrf_token %}
+      <div id="carrier_div">    
+        <label for="carrrier_select">Carrier ID</label>
         <select name="carrier_select" id="carrier_select">
-          <option disabled selected value="%">-------------------</option>
+          <option disabled selected value="%">------------------</option>
           {% for item in carrier %}
           <option value="{{ item.id }}">{{ item.name }}</option>
           {% endfor %}
         </select>
 
+      Carrier ID: <label id="test"></label>
+      <script type="text/javascript" src="{% static 'update.js' %}"></script>
+      </div>
+
+      <div id="time_div">
+        <label>Set time</label>
         <select name="hour_select" id="hour_select">
           <option disabled selected value="%">--</option>
           {% for item in hour %}
           <option value="{{ item }}">{{ item }}</option>
           {% endfor %}
         </select>
-      </form>
-      Carrier ID: <label id="test"></label>
-      <script type="text/javascript" src="{% static 'update.js' %}"></script>
-    </div>
 
-    <div>
-      Zoom level:<label id="zoom" value=""></label>  
+        <label>:</label>
+        <select name="minute_select" id="minute_select">
+          <option disabled selected value="%">-------</option>
+          {% for item in minute %}
+          <option value="{{ item.id }}">{{ item.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </form>
+    
+    <div id="text_div">
+      Zoom level:<label id="zoom" value=""></label><br>
+      Block size:<label id="block" value=""></label>meters
     </div>
     
     <div id="map">
       <script type="text/javascript" src="{% static 'initMap.js' %}"></script>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4DoGm9uJ-MhbwRTWEzZVTRLrqQ-MYvmk&signed_in=true&libraries=visualization&callback=initMap">
+      <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4DoGm9uJ-MhbwRTWEzZVTRLrqQ-MYvmk&signed_in=true&libraries=visualization&callback=initMap">
       </script>
     </div>
   </body>

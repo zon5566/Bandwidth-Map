@@ -25,6 +25,7 @@ function initMap() {
   });
 
   document.getElementById("zoom").innerHTML = map.getZoom();
+   document.getElementById("block").innerHTML = 400;
   // --Block Lines-----------
   for(var lon_ = XORIGIN; lon_<=XEND; lon_+=XBLOCK_SIZE) {
     LineCoordinate = [
@@ -115,6 +116,7 @@ function initMap() {
           yblocksize: blocksize[1],
           carrier_select: $('#carrier_select').val(),
           hour_select: $('#hour_select').val(),
+          minute_select: $('#minute_select').val(),
         },
         success: function(data) {
           console.log('pass argument success');
@@ -129,6 +131,13 @@ function initMap() {
   google.maps.event.addListener(map, 'zoom_changed', function(){
     var current_zlevel = map.getZoom();
     document.getElementById('zoom').innerHTML = current_zlevel;
+    
+    var degree;
+    if(current_zlevel > 18) degree = 1;
+    else if(current_zlevel <= 13) degree = Math.pow(2,16-current_zlevel);
+    else degree = 19 - current_zlevel;
+    document.getElementById('block').innerHTML = 100*degree;
+    
     if(current_zlevel>18) return;
     else{
       remove_block();
@@ -152,8 +161,6 @@ function draw_block(level){
   XBLOCK_SIZE = XMETER_SIZE*degree;
   YBLOCK_SIZE = YMETER_SIZE*degree;
 
-  console.log(XBLOCK_SIZE, YBLOCK_SIZE);
-
   for(var i=0; i<VLine.length; i+=degree){
     VLine[i].setMap(map);
   }
@@ -176,7 +183,6 @@ function remove_block(){
 function get_center(lng, lat){
   var xblock = Math.floor((lng-XORIGIN)/XBLOCK_SIZE)+1;
   var yblock = Math.floor((lat-YORIGIN)/YBLOCK_SIZE)+1;
-  console.log(xblock, yblock);
   var center_lng = XORIGIN + XBLOCK_SIZE*(xblock-0.5);
   var center_lat = YORIGIN + YBLOCK_SIZE*(yblock-0.5);
   return [center_lng, center_lat];
